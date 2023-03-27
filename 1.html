@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>汇率计算器</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
+    <style>
+      body {
+        font-size: 1rem;
+      }
+      h1 {
+        font-size: 2rem;
+        text-align: center;
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+      }
+      form {
+        margin-top: 1rem;
+      }
+      label {
+        font-size: 1rem;
+        margin-bottom: 0.5rem;
+        display: block;
+      }
+      input[type="number"] {
+        width: 100%;
+        padding: 0.375rem 0.75rem;
+        font-size: 1rem;
+        line-height: 1.5;
+        color: #495057;
+        background-color: #fff;
+        border: 1px solid #ced4da;
+        border-radius: 0.25rem;
+        transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+      }
+      .btn-primary {
+        display: block;
+        width: 100%;
+        padding: 0.375rem 0.75rem;
+        font-size: 1rem;
+        line-height: 1.5;
+        border-radius: 0.25rem;
+        transition: all 0.15s ease-in-out;
+        text-align: center;
+      }
+      #result {
+        margin-top: 1rem;
+        font-size: 1rem;
+      }
+      @media (min-width: 576px) {
+        body {
+            font-size: 1.2rem;
+        }
+        h1 {
+          font-size: 3rem;
+        }
+        form {
+          max-width: 500px;
+          margin-left: auto;
+          margin-right: auto;
+        }
+      }
+    </style>
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  </head>
+  <body>
+    <div class="container">
+      <h1>汇率计算器</h1>
+      <form id="calculator-form">
+        <div class="mb-3">
+          <label for="exchange-rate" class="form-label">当前汇率：</label>
+          <input type="number" class="form-control" id="exchange-rate" step="0.01" required>
+        </div>
+        <div class="mb-3">
+          <label for="discount" class="form-label">折扣：</label>
+          <input type="number" class="form-control" id="discount" step="0.01" value="0.91" required>
+        </div>
+        <div class="mb-3">
+          <label for="remainder" class="form-label">余数：</label>
+          <input type="number" class="form-control" id="remainder" value="0"required>
+        </div>
+        <button type="submit" class="btn btn-primary">计算</button>
+      </form>
+      <div id="result"></div>
+    </div>
+    <script>
+      $(function() {
+        $('#calculator-form').submit(function(event) {
+          event.preventDefault();
+          var exchange_rate = parseFloat($('#exchange-rate').val());
+          var discount = parseFloat($('#discount').val());
+          var remainder = parseInt($('#remainder').val());
+          var result = '';
+          for (var x = 1500; x >= 1; x--) {
+            var y = Math.round(x * exchange_rate / discount);
+            var z = y % 100;
+            if (z == remainder) {
+              result += x + ' ' + y + '<br>';
+            }
+          }
+          $('#result').html(result);
+        });
+      });
+    </script>
+  </body>
+</html>
