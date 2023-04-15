@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>三重底/三重顶开仓计算</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100%;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2em;
+            margin-top: 0.5em;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5em;
+        }
+
+        input[type="number"] {
+            width: 100%;
+            padding: 0.5em;
+            border-radius: 0.5em;
+            border: none;
+            box-shadow: 0 0 0.3em rgba(0, 0, 0, 0.3);
+            font-size: 1em;
+            max-width: 200px;
+        }
+
+        button {
+            display: block;
+            width: 100%;
+            margin-top: 1em;
+            padding: 0.5em;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 0.5em;
+            font-size: 1em;
+            box-shadow: 0 0 0.3em rgba(0, 0, 0, 0.3);
+        }
+
+        #result {
+            margin-top: 1em;
+            padding: 0.5em;
+            border-radius: 0.5em;
+            box-shadow: 0 0 0.3em rgba(0, 0, 0, 0.3);
+            font-size: 1em;
+            flex-grow: 1;
+        }
+
+        @media only screen and (max-width: 768px) {
+          body {
+            height: auto;
+          }
+        }
+    </style>
+
+</head>
+<body>
+    <h1>三重底/三重顶开仓计算</h1>
+    <label for="xt">选择形态：</label>
+    <select id="xt">
+        <option value="0">三重底</option>
+        <option value="1">三重顶</option>
+    </select>
+    <br><br>
+    <label for="top">区间上限价格：</label>
+    <input type="number" step="0.01" id="top"><br><br>
+    <label for="down">区间下限价格：</label>
+    <input type="number" step="0.01" id="down"><br><br>
+    <div id="df-input">
+        <label for="df">第三个底点价格：</label>
+        <input type="number" step="0.01" id="df"><br><br>
+    </div>
+    <button onclick="calculate()">计算</button>
+    <br><br>
+    <div id="result"></div>
+
+    <script>
+        function calculate() {
+            var xt = parseInt(document.getElementById('xt').value);
+            var top = parseFloat(document.getElementById('top').value);
+            var down = parseFloat(document.getElementById('down').value);
+            var df = parseFloat(document.getElementById('df').value);
+
+            var resultDiv = document.getElementById('result');
+
+            if (xt === 0) {
+                var bottom = (top - down) * 0.236 + down;
+                if (df < bottom) {
+                    resultDiv.innerHTML = `开多；开仓价：${bottom.toFixed(2)}；止损价：${df.toFixed(2)}`;
+                } else {
+                    resultDiv.innerHTML = '不符合开仓条件：第三个底点价未进入震荡区间底部';
+                }
+            } else {
+                var topValue = top - (top - down) * 0.236;
+                if (df > topValue) {
+                    resultDiv.innerHTML = `开空；开仓价：${topValue.toFixed(2)}；止损价：${df.toFixed(2)}`;
+                } else {
+                    resultDiv.innerHTML = '不符合开仓条件：第三个高点价未进入震荡区间顶部';
+                }
+            }
+        }
+
+        var xtSelect = document.getElementById('xt');
+        var dfInput = document.getElementById('df-input');
+        xtSelect.addEventListener('change', function() {
+            if (xtSelect.value ==='0') {
+                dfInput.innerHTML = <label for="df">第三个底点价格：</label><input type="number" step="0.01" id="df"><br><br>;
+            } else {
+                dfInput.innerHTML = <label for="df">第三个高点价格：</label><input type="number" step="0.01" id="df"><br><br>;
+            }
+        });
+
+    // Prevent auto zoom on input focus
+    var viewport = document.querySelector('meta[name=viewport]');
+    if (viewport) {
+        viewport.content += ', height=device-height';
+        setTimeout(function() {
+            viewport.content = viewport.content.replace(/height=[^,]+,?/, '');
+        }, 500);
+    }
+</script>
+</body>
+</html>
