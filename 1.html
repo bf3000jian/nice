@@ -95,7 +95,7 @@
           var discount = parseFloat($('#discount').val());
           var remainder = parseInt($('#remainder').val());
           var result = '';
-          for (var x = 1500; x >= 1; x--) {
+          for (var x = 2000; x >= 1; x--) {
             var y = Math.round(x * exchange_rate / discount);
             var z = y % 100;
             if (z == remainder) {
